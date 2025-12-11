@@ -1,0 +1,96 @@
+server:
+  port: 8080
+  readTimeout: 30s
+  writeTimeout: 30s
+  maxHeaderBytes: 1048576
+
+cors:
+  allowedOrigins:
+    - http://localhost:4200
+    - http://localhost:3000
+    - https://hockhongkho.com
+  allowedMethods:
+    - GET
+    - POST
+    - DELETE
+    - PUT
+    - PATCH
+    - OPTIONS
+  allowedHeaders:
+    - "*"
+  allowCredentials: true
+  cacheSeconds: 86400
+
+redis:
+  host: localhost
+  port: 6379
+  password: Hus@334nt
+  db: 0
+  poolSize: 10
+
+cache:
+  enabled: true
+  tokenTTL: 300
+  authzTTL: 60
+
+rateLimit:
+  enabled: true
+  defaultLimit: 100
+  windowSeconds: 60
+
+circuitBreaker:
+  enabled: true
+  threshold: 5
+  timeout: 30s
+  halfOpenRequests: 3
+
+services:
+  authentication:
+    url: http://localhost:8081
+    timeout: 5s
+    validateEndpoint: /api/v1/auth/validate
+  authorization:
+    url: http://localhost:8082
+    timeout: 3s
+    checkEndpoint: /api/v1/authorization/check
+  user:
+    url: http://localhost:8083
+    timeout: 10s
+  order:
+    url: http://localhost:8084
+    timeout: 10s
+  payment:
+    url: http://localhost:8085
+    timeout: 30s
+  payout:
+    url: http://localhost:8086
+    timeout: 10s
+  notification:
+    url: http://localhost:8087
+    timeout: 5s
+  storage:
+    url: http://localhost:8088
+    timeout: 300s
+  analytics:
+    url: http://localhost:8089
+    timeout: 10s
+  classroom:
+    url: http://localhost:8090
+    timeout: 10s
+  content:
+    url: http://localhost:8091
+    timeout: 10s
+  quiz:
+    url: http://localhost:8092
+    timeout: 10s
+  enrollment:
+    url: http://localhost:8093
+    timeout: 10s
+
+logging:
+  level: info
+  format: json
+
+metrics:
+  enabled: true
+  path: /metrics
