@@ -1,0 +1,93 @@
+# User Service Routes (Tutors, Parents, Students, Users)
+
+# Tutor routes
+- path: /api/v1/tutors
+  routes:
+    # Public
+    - path: ""
+      method: GET
+      service: user
+      public: true
+    - path: /search
+      method: GET
+      service: user
+      public: true
+    - path: /featured
+      method: GET
+      service: user
+      public: true
+    - path: /:id
+      method: GET
+      service: user
+      public: true
+    
+    # Protected
+    - path: ""
+      method: POST
+      service: user
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: PUT
+      service: user
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: PATCH
+      service: user
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: DELETE
+      service: user
+      auth: true
+      roles: [ROLE_ADMIN]
+
+# Parent routes
+- path: /api/v1/parents
+  auth: true
+  service: user
+  routes:
+    - path: ""
+      method: GET
+      roles: [ROLE_ADMIN]
+    - path: /:id
+      method: GET
+      roles: [ROLE_PARENT, ROLE_ADMIN]
+    - path: ""
+      method: POST
+      roles: [ROLE_PARENT, ROLE_ADMIN]
+    - path: /:id
+      method: PUT
+      roles: [ROLE_PARENT, ROLE_ADMIN]
+    - path: /:id
+      method: DELETE
+      roles: [ROLE_ADMIN]
+
+# Student routes
+- path: /api/v1/students
+  auth: true
+  service: user
+  routes:
+    - path: ""
+      method: GET
+      roles: [ROLE_ADMIN]
+    - path: /:id
+      method: GET
+      roles: [ROLE_STUDENT, ROLE_PARENT, ROLE_ADMIN]
+    - path: /:id
+      method: PUT
+      roles: [ROLE_STUDENT, ROLE_PARENT, ROLE_ADMIN]
+
+# User profile routes
+- path: /api/v1/users
+  auth: true
+  service: user
+  routes:
+    - path: /me
+      method: GET
+    - path: /me
+      method: PUT
+    - path: /:id
+      method: GET
+      roles: [ROLE_ADMIN]

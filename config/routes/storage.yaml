@@ -1,0 +1,20 @@
+# Storage/Upload Service Routes
+
+- path: /api/v1/upload
+  auth: true
+  service: storage
+  routes:
+    - path: /video
+      method: POST
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+      upload: true
+      maxFileSize: 500MB
+    - path: /document
+      method: POST
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+      upload: true
+      maxFileSize: 50MB
+    - path: /image
+      method: POST
+      upload: true
+      maxFileSize: 10MB

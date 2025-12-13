@@ -1,0 +1,16 @@
+# Enrollment Service Routes
+
+- path: /api/v1/classrooms/:id/enroll
+  method: POST
+  service: enrollment
+  auth: true
+  roles: [ROLE_STUDENT, ROLE_PARENT]
+
+- path: /api/v1/enrollments
+  auth: true
+  service: enrollment
+  routes:
+    - path: ""
+      method: GET
+    - path: /:id
+      method: GET

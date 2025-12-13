@@ -1,0 +1,61 @@
+# Classroom Service Routes
+
+- path: /api/v1/classrooms
+  service: classroom
+  circuitBreaker: true
+  routes:
+    # Public
+    - path: ""
+      method: GET
+      public: true
+    - path: /featured
+      method: GET
+      public: true
+    - path: /categories
+      method: GET
+      public: true
+    - path: /:id
+      method: GET
+      public: true
+    
+    # Protected - Create/Update
+    - path: ""
+      method: POST
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: PUT
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: PATCH
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id
+      method: DELETE
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id/publish
+      method: POST
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id/settings
+      method: GET
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:id/settings
+      method: PUT
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+
+# Tutor Dashboard
+- path: /api/v1/tutor
+  auth: true
+  roles: [ROLE_TUTOR, ROLE_ADMIN]
+  routes:
+    - path: /classrooms
+      method: GET
+      service: classroom
+    - path: /classrooms/:id/students
+      method: GET
+      service: enrollment

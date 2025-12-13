@@ -1,0 +1,30 @@
+# Quiz Service Routes
+
+- path: /api/v1/classrooms/:id/quizzes
+  auth: true
+  service: quiz
+  routes:
+    - path: ""
+      method: GET
+      roles: [ROLE_STUDENT, ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:quizId
+      method: GET
+      roles: [ROLE_STUDENT, ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:quizId/submit
+      method: POST
+      roles: [ROLE_STUDENT]
+    - path: /:quizId/results
+      method: GET
+      roles: [ROLE_STUDENT, ROLE_TUTOR, ROLE_ADMIN]
+    - path: ""
+      method: POST
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:quizId
+      method: PUT
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:quizId
+      method: DELETE
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:quizId/analytics
+      method: GET
+      roles: [ROLE_TUTOR, ROLE_ADMIN]

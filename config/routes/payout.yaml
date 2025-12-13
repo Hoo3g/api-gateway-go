@@ -1,0 +1,33 @@
+# Payout Service Routes
+
+# Tutor earnings and payouts
+- path: /api/v1/tutor
+  auth: true
+  roles: [ROLE_TUTOR]
+  service: payout
+  routes:
+    - path: /earnings
+      method: GET
+    - path: /earnings/history
+      method: GET
+    - path: /payouts
+      method: GET
+    - path: /bank-account
+      method: GET
+    - path: /bank-account
+      method: PUT
+
+# Admin payout management
+- path: /api/v1/admin/payouts
+  auth: true
+  roles: [ROLE_ADMIN]
+  service: payout
+  routes:
+    - path: ""
+      method: GET
+    - path: ""
+      method: POST
+    - path: /:id/approve
+      method: POST
+    - path: /:id/reject
+      method: POST

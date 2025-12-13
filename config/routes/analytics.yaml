@@ -1,0 +1,27 @@
+# Analytics Service Routes
+
+# Tutor analytics
+- path: /api/v1/tutor/analytics
+  auth: true
+  roles: [ROLE_TUTOR]
+  service: analytics
+  routes:
+    - path: ""
+      method: GET
+    - path: /revenue
+      method: GET
+
+# Admin analytics
+- path: /api/v1/admin/analytics
+  auth: true
+  roles: [ROLE_ADMIN]
+  service: analytics
+  routes:
+    - path: ""
+      method: GET
+    - path: /users
+      method: GET
+    - path: /revenue
+      method: GET
+    - path: /classrooms
+      method: GET

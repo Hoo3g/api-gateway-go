@@ -1,0 +1,35 @@
+# Content/Lessons Service Routes
+
+- path: /api/v1/classrooms/:id/lessons
+  service: content
+  routes:
+    - path: ""
+      method: GET
+      public: true
+    - path: /:lessonId
+      method: GET
+      auth: true
+      roles: [ROLE_STUDENT, ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:lessonId/video
+      method: GET
+      auth: true
+      roles: [ROLE_STUDENT, ROLE_TUTOR, ROLE_ADMIN]
+      stream: true
+    - path: ""
+      method: POST
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:lessonId
+      method: PUT
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:lessonId
+      method: DELETE
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+    - path: /:lessonId/upload
+      method: POST
+      auth: true
+      roles: [ROLE_TUTOR, ROLE_ADMIN]
+      upload: true
+      maxFileSize: 500MB

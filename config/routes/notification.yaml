@@ -1,0 +1,20 @@
+# Notification Service Routes
+
+- path: /api/v1/notifications
+  auth: true
+  service: notification
+  routes:
+    - path: ""
+      method: GET
+    - path: /:id
+      method: GET
+    - path: /:id/read
+      method: PUT
+    - path: /read-all
+      method: PUT
+    - path: /:id
+      method: DELETE
+    - path: /preferences
+      method: GET
+    - path: /preferences
+      method: PUT

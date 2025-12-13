@@ -1,0 +1,52 @@
+# Authentication Service Routes
+- path: /api/v1/auth
+  routes:
+    # Public routes
+    - path: /register
+      method: POST
+      service: authentication
+      public: true
+      rateLimit: 10/minute
+      
+    - path: /login
+      method: POST
+      service: authentication
+      public: true
+      rateLimit: 20/minute
+      
+    - path: /refresh
+      method: POST
+      service: authentication
+      public: true
+      
+    - path: /forgot-password
+      method: POST
+      service: authentication
+      public: true
+      rateLimit: 5/minute
+      
+    - path: /reset-password
+      method: POST
+      service: authentication
+      public: true
+      
+    - path: /verify-email
+      method: GET
+      service: authentication
+      public: true
+      
+    # Protected routes
+    - path: /logout
+      method: POST
+      service: authentication
+      auth: true
+      
+    - path: /change-password
+      method: POST
+      service: authentication
+      auth: true
+      
+    - path: /me
+      method: GET
+      service: authentication
+      auth: true

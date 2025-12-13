@@ -1,0 +1,48 @@
+# Payment Service Routes
+
+- path: /api/v1/payments
+  routes:
+    # Public - Callbacks
+    - path: /callback
+      method: GET
+      service: payment
+      public: true
+    - path: /callback
+      method: POST
+      service: payment
+      public: true
+    - path: /callback/vnpay
+      method: GET
+      service: payment
+      public: true
+    - path: /callback/momo
+      method: POST
+      service: payment
+      public: true
+    
+    # Protected
+    - path: /checkout
+      method: POST
+      service: payment
+      auth: true
+      roles: [ROLE_STUDENT, ROLE_PARENT]
+    - path: /history
+      method: GET
+      service: payment
+      auth: true
+    - path: /:id
+      method: GET
+      service: payment
+      auth: true
+
+# Order Service
+- path: /api/v1/orders
+  auth: true
+  service: order
+  routes:
+    - path: ""
+      method: GET
+    - path: /:id
+      method: GET
+    - path: ""
+      method: POST

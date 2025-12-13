@@ -1,0 +1,48 @@
+# Authorization Service Routes (Roles, Permissions, User-Roles)
+
+# Role Management - Admin only
+- path: /api/v1/roles
+  auth: true
+  roles: [ROLE_ADMIN]
+  service: authorization
+  routes:
+    - path: ""
+      method: GET
+    - path: ""
+      method: POST
+    - path: /:roleId
+      method: PUT
+    - path: /:roleId
+      method: DELETE
+
+# User-Role Management - Admin only
+- path: /api/v1/user-roles
+  auth: true
+  roles: [ROLE_ADMIN]
+  service: authorization
+  routes:
+    - path: /assign
+      method: POST
+    - path: /add-to-users
+      method: POST
+    - path: /roles/:userId
+      method: GET
+    - path: /remove
+      method: DELETE
+    - path: /check
+      method: GET
+
+# Permission Management - Admin only
+- path: /api/v1/permissions
+  auth: true
+  roles: [ROLE_ADMIN]
+  service: authorization
+  routes:
+    - path: /grant
+      method: POST
+    - path: /revoke
+      method: DELETE
+    - path: /role/:roleId
+      method: GET
+    - path: /policies
+      method: GET
