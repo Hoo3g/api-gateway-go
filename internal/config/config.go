@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Config holds all configuration for the gateway
 type Config struct {
 	Server         ServerConfig         `mapstructure:"server"`
 	CORS           CORSConfig           `mapstructure:"cors"`
@@ -67,10 +68,11 @@ type CircuitBreakerConfig struct {
 }
 
 type ServiceConfig struct {
-	URL              string        `mapstructure:"url"`
-	Timeout          time.Duration `mapstructure:"timeout"`
-	ValidateEndpoint string        `mapstructure:"validateEndpoint"`
-	CheckEndpoint    string        `mapstructure:"checkEndpoint"`
+	URL                     string        `mapstructure:"url"`
+	Timeout                 time.Duration `mapstructure:"timeout"`
+	ValidateEndpoint        string        `mapstructure:"validateEndpoint"`
+	CheckEndpoint           string        `mapstructure:"checkEndpoint"`
+	PermissionCheckEndpoint string        `mapstructure:"permissionCheckEndpoint"`
 }
 
 type ServicesConfig struct {
@@ -87,6 +89,8 @@ type ServicesConfig struct {
 	Content        ServiceConfig `mapstructure:"content"`
 	Quiz           ServiceConfig `mapstructure:"quiz"`
 	Enrollment     ServiceConfig `mapstructure:"enrollment"`
+	// Webhook secret for cache invalidation
+	WebhookSecret string `mapstructure:"webhookSecret"`
 }
 
 type LoggingConfig struct {
@@ -99,10 +103,11 @@ type MetricsConfig struct {
 	Path    string `mapstructure:"path"`
 }
 
+// Load reads configuration from file and environment variables
 func Load(configPath string) (*Config, error) {
 	v := viper.New()
 
-	// Set default
+	// Set defaults
 	v.SetDefault("server.port", 8080)
 	v.SetDefault("server.readTimeout", "30s")
 	v.SetDefault("server.writeTimeout", "30s")
@@ -119,7 +124,7 @@ func Load(configPath string) (*Config, error) {
 	v.SetDefault("logging.level", "info")
 	v.SetDefault("logging.format", "json")
 
-	// read config file
+	// Read config file
 	if configPath != "" {
 		v.SetConfigFile(configPath)
 	} else {
@@ -140,18 +145,19 @@ func Load(configPath string) (*Config, error) {
 
 	var cfg Config
 	if err := v.Unmarshal(&cfg); err != nil {
-		return nil, fmt.Errorf("failed to unmarshal config file: %w", err)
+		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
 	}
 
 	return &cfg, nil
 }
 
+// GetServiceURL returns the URL for a given service name
 func (c *Config) GetServiceURL(serviceName string) string {
 	switch serviceName {
-	case "authorization":
-		return c.Services.Authorization.URL
 	case "authentication":
 		return c.Services.Authentication.URL
+	case "authorization":
+		return c.Services.Authorization.URL
 	case "user":
 		return c.Services.User.URL
 	case "order":
@@ -179,6 +185,7 @@ func (c *Config) GetServiceURL(serviceName string) string {
 	}
 }
 
+// GetServiceTimeout returns the timeout for a given service name
 func (c *Config) GetServiceTimeout(serviceName string) time.Duration {
 	switch serviceName {
 	case "authentication":
