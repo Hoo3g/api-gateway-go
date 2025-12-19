@@ -61,14 +61,36 @@ func (m *AuthMiddleware) Handle() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := m.extractToken(c)
 		if token == "" {
-			m.logger.Warn("Missing or invalid Authorization header",
-				zap.String("path", c.Request.URL.Path))
-			aboutWithError(c, http.StatusUnauthorized, "Missing or invalid Authorization header")
+			abortWithError(c, 401, "Missing Authorization header")
+			return
 		}
-	}
-}
 
-func aboutWithError(c *gin.Context, unauthorized int, s string) {
+		ctx := c.Request.Context()
+
+		if cached, found := m.cache.GetTokenValidation(ctx, token); found {
+			m.setUserContext(c, cached)
+			c.Next()
+			return
+		}
+
+		resp, err := m.validateToken(ctx, token)
+		if err != nil {
+			abortWithError(c, 503, "Auth service unavailable")
+			return
+		}
+
+		if !resp.Valid || resp.UserId == "" {
+			abortWithError(c, 401, "Invalid or expired token")
+			return
+		}
+
+		cacheCtx, cancel := context.WithTimeout(ctx, 2*time.Second)
+		defer cancel()
+		_ = m.cache.CacheTokenValidation(cacheCtx, token, resp)
+
+		m.setUserContext(c, resp)
+		c.Next()
+	}
 
 }
 
